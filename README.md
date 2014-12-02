@@ -14,7 +14,7 @@ class PostUserHandler(
       if (authorized) {
         val post = new UserPost(request.getParams())
         val errors = userPostValidator.validate(post)
-        if (errors.size == 0) {
+        if (errors.empty) {
           val newUser = userService.registerUser(post)
           return new UserResponse(newUser, 201)
         }
