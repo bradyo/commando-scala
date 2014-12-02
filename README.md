@@ -7,6 +7,9 @@ Experimental Scala web framework based on composition of `RequestHandler` object
 abstract class AuthenticatedRequestHandler {
   def handle(request: AuthenticatedRequest): Response
 }
+```
+
+```scala
 class PostUserHandler(
   val userPostValidator: UserPostValidator, 
   val userService: UserService
