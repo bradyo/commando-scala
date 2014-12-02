@@ -33,7 +33,7 @@ class WebRequestHandler(val app: Application) extends RequestHandler {
   lazy val noteModuleHandler = app.getNoteModuleHandler
   
   lazy val router = new Router[Route[RequestHandler]](
-    new Route("home", Method.Any, "/", homeHandler),
+    new Route("home", HttpMethod.Get, "/", homeHandler),
     new PathRoute("user-module", "/users", userModuleHandler),
     new PathRoute("note-module", "/notes", noteModuleHandler)
   ))
