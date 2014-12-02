@@ -46,7 +46,7 @@ class WebRequestHandler(val app: Application) extends RequestHandler {
     router.getMatch(request) match {
       case null => new Response("Not found", 404)
       case matchedRoute => {
-        val authenticatedRequest = gaurd.authenticate(request)
+        val authenticatedRequest = guard.authenticate(request)
         matchedRoute.value.handle(authenticatedRequest)
       }
     }
