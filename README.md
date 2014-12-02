@@ -4,6 +4,9 @@ commando-scala
 Experimental Scala web framework based on composition of `RequestHandler` objects.
 
 ```scala
+abstract class AuthenticatedRequestHandler {
+  def handle(request: AuthenticatedRequest): Response
+}
 class PostUserHandler(
   val userPostValidator: UserPostValidator, 
   val userService: UserService
@@ -28,6 +31,7 @@ class PostUserHandler(
 ```scala
 class WebRequestHandler(val app: Application) extends RequestHandler {
 
+  lazy val guard = app.getGuard
   lazy val homeHandler = new HomeHandler(app.getConfig)
   lazy val userModuleHandler = app.getUserModuleHandler
   lazy val noteModuleHandler = app.getNoteModuleHandler
@@ -41,7 +45,10 @@ class WebRequestHandler(val app: Application) extends RequestHandler {
   override def handle(request: Request): Response = {
     router.getMatch(request) match {
       case null => new Response("Not found", 404)
-      case matchedRoute => matchedRoute.value.handle(request)
+      case matchedRoute => {
+        val authenticatedRequest = gaurd.authenticate(request)
+        matchedRoute.value.handle(authenticatedRequest)
+      }
     }
   }
 }
