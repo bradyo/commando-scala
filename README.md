@@ -10,17 +10,17 @@ class PostUserHandler(
 ) extends AuthenticatedRequestHandler {
     
     def handle(request: AuthenticatedRequest): Response = {
-      val authorized = request.getAccessToken.hasRole(Roles.Admin);
-      if (authorized) {
-        val post = new UserPost(request.getParams())
-        val errors = userPostValidator.validate(post)
-        if (errors.empty) {
-          val newUser = userService.registerUser(post)
-          return new UserResponse(newUser, 201)
-        }
-        else new ValidationErrorResponse("Invalid request", errors)
-      } 
-      else NotAllowedResponse("Not allowed to post Users");
+      if (! request.getAccessToken.hasRole(Roles.Admin)) 
+        return new NotAllowedResponse("Not allowed to post Users")
+
+      val post = new UserPost(request.getParams())
+      val errors = userPostValidator.validate(post)
+      if (! errors.empty) 
+        return new ValidationErrorResponse("Invalid request", errors)
+      
+      val newUser = userService.registerUser(post)
+      
+      new UserResponse(newUser, 201)
     }
 }
 ```
