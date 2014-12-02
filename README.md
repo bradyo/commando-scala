@@ -31,6 +31,7 @@ class WebRequestHandler(val app: Application) extends RequestHandler {
   lazy val homeHandler = new HomeHandler(app.getConfig)
   lazy val userModuleHandler = app.getUserModuleHandler
   lazy val noteModuleHandler = app.getNoteModuleHandler
+  
   lazy val router = new Router[Route[RequestHandler]](
     new Route("home", Method.Any, "/", homeHandler),
     new PathRoute("user-module", "/users", userModuleHandler),
